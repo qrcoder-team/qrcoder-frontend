@@ -41,6 +41,14 @@ export class QrCode {
     return jsonConvert.serialize(this, QrCode)
   }
 
+  get content() {
+    if (this.type === QrCodeType.URL) {
+      return `https://qrcoder-api.tonylin0826.workers.dev/url-uuid/${this.id}`;
+    }
+
+    return ''
+  }
+
   static fromJson(json: object): QrCode {
     const jsonConvert: JsonConvert = new JsonConvert();
     return jsonConvert.deserializeObject<QrCode>(json, QrCode)

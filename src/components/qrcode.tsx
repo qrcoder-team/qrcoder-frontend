@@ -8,6 +8,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useHistory } from 'react-router'
+import QrCodeWithLogo from 'qrcode-with-logos'
+import { useEffect } from 'react'
+import { QrCode as QrCodeClass } from '../types/qrcode'
 
 const Img = styled('img')({
   margin: 'auto',
@@ -16,23 +19,40 @@ const Img = styled('img')({
   maxHeight: '100%',
 })
 
-const QrCode = ({
-  id,
-  name,
-  type,
-  createdAt,
-  lastSyncOn,
-}: QrCodeProps): React.ReactElement => {
+const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
   const history = useHistory()
+  const { id, type, createdAt, lastSyncOn, name } = code
 
+  // const qrCodeImageState, setQrCodeImageState = useState()
+
+  let qrcodeImage: QrCodeWithLogo | undefined = undefined
+
+  const updateQrCodeImage = () => {
+    qrcodeImage = new QrCodeWithLogo({
+      content: new QrCodeClass(code).content,
+      width: 128,
+      image: document.getElementById(`img-${id}`) as HTMLImageElement,
+      // logo: {
+      //   src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+      // }
+    })
+
+    qrcodeImage.toImage()
+  }
+
+  useEffect(() => {
+    updateQrCodeImage()
+  })
+
+  console.log(document.getElementById(`img-${id}`))
   return (
     <Card sx={{ padding: 4 }}>
       <Grid container spacing={2}>
         <Grid item xs="auto">
           <ButtonBase sx={{ width: 128, height: 128 }}>
             <Img
+              id={`img-${id}`}
               alt="complex"
-              src="https://mui.com/static/images/grid/complex.jpg"
               sx={{ width: 128, height: 128 }}
             />
           </ButtonBase>
@@ -72,7 +92,15 @@ const QrCode = ({
 
       <Grid container spacing={2} sx={{ marginTop: 0.5 }}>
         <Grid item xs="auto">
-          <Button sx={{ width: 128 }} variant="outlined">
+          <Button
+            sx={{ width: 128 }}
+            variant="outlined"
+            onClick={() => {
+              if (qrcodeImage) {
+                qrcodeImage.downloadImage(`${code.name.replaceAll(' ', '')}`)
+              }
+            }}
+          >
             Download
           </Button>
         </Grid>
@@ -94,11 +122,7 @@ const QrCode = ({
 }
 
 export interface QrCodeProps {
-  id: string
-  name: string
-  type: string
-  createdAt: number
-  lastSyncOn?: number
+  code: QrCodeClass
 }
 
 export default QrCode

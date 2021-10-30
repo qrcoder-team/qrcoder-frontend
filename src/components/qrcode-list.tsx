@@ -37,7 +37,7 @@ const QrCodeList = (): React.ReactElement => {
       <Grid container spacing={4} sx={{ paddingTop: 4 }}>
         {qrCodes.map((code, idx) => (
           <Grid key={`code${idx}`} item xs={12} sm={12} md={6}>
-            <QrCodeComponent {...code}></QrCodeComponent>
+            <QrCodeComponent code={code}></QrCodeComponent>
           </Grid>
         ))}
       </Grid>
