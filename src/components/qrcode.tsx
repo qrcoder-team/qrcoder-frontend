@@ -46,7 +46,10 @@ const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
 
   console.log(document.getElementById(`img-${id}`))
   return (
-    <Card sx={{ padding: 4 }}>
+    <Card
+      sx={{ padding: 4, boxShadow: 'rgb(0 0 0 / 15%) 0px 4px 24px;' }}
+      // sx={{  }}
+    >
       <Grid container spacing={2}>
         <Grid item xs="auto">
           <ButtonBase sx={{ width: 128, height: 128 }}>

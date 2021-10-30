@@ -11,7 +11,7 @@ const Img = styled('img')({
   borderRadius: 10,
 })
 
-const QrCodeUrl = ({
+const QrCodeSms = ({
   code,
   setCode,
 }: QrCodeDetailProps): React.ReactElement => {
@@ -35,7 +35,7 @@ const QrCodeUrl = ({
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12}>
         <TextField
           label="Name"
           value={code.name}
@@ -50,16 +50,34 @@ const QrCodeUrl = ({
           }}
         />
       </Grid>
-      <Grid item xs={12} md={9} sx={{ marginTop: [2, 2, 0] }}>
+      <Grid item xs={12} md={6}>
         <TextField
-          label="URL"
-          value={code.url}
+          label="Recipient Phone Number"
+          value={code.smsPhone}
           sx={{ width: '100%' }}
           onChange={(e) => {
             setCode(
               new QrCode({
                 ...code,
-                url: e.target.value,
+                smsPhone: e.target.value,
+              })
+            )
+          }}
+          onBlur={() => {
+            updateQrCodeImage()
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} sx={{ marginTop: [2, 2, 0] }}>
+        <TextField
+          label="Text Message"
+          value={code.smsMessage}
+          sx={{ width: '100%' }}
+          onChange={(e) => {
+            setCode(
+              new QrCode({
+                ...code,
+                smsMessage: e.target.value,
               })
             )
           }}
@@ -95,4 +113,4 @@ const QrCodeUrl = ({
   )
 }
 
-export default QrCodeUrl
+export default QrCodeSms

@@ -14,11 +14,13 @@ import { Fragment, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import QrCodeUrl from './qrcode-url'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import axios from 'axios'
 import { QrCode, QrCodeType } from '../types/qrcode'
 import { useDispatch, useSelector } from 'react-redux'
 import { Dispatch } from '../store'
 import { RootModel } from '../models'
+import QrCodeSms from './qrcode-sms'
 
 const QrCodeDetail = (): React.ReactElement => {
   const { id }: { id: string } = useParams()
@@ -41,13 +43,13 @@ const QrCodeDetail = (): React.ReactElement => {
       'https://qrcoder-api.tonylin0826.workers.dev/api/qrcode',
       new QrCode(code).toJson(),
       { headers: { 'Content-Type': 'application/json' } }
-    ) 
+    )
 
-    const idx = qrCodes.findIndex(q => q.id === id)
+    const idx = qrCodes.findIndex((q) => q.id === id)
     if (idx >= 0) {
       qrCodes[idx] = new QrCode({
         ...code,
-        lastSyncOn: new Date().getTime()
+        lastSyncOn: new Date().getTime(),
       })
 
       dispatch.qrCode.saveQrCodes(qrCodes)
@@ -56,7 +58,7 @@ const QrCodeDetail = (): React.ReactElement => {
 
     setMessage({
       message: 'Save success',
-      open: true
+      open: true,
     })
   }
 
@@ -71,7 +73,10 @@ const QrCodeDetail = (): React.ReactElement => {
   }
 
   const qrCodeDetails = () => {
-    const typeMap = new Map<QrCodeType, any>([[QrCodeType.URL, QrCodeUrl]])
+    const typeMap = new Map<QrCodeType, any>([
+      [QrCodeType.URL, QrCodeUrl],
+      [QrCodeType.SMS, QrCodeSms],
+    ])
 
     return (Object.keys(QrCodeType) as Array<keyof typeof QrCodeType>).map(
       (k, index: number) => {
@@ -99,14 +104,39 @@ const QrCodeDetail = (): React.ReactElement => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: 4 }}>
       <Grid container spacing={0}>
-        <Grid item container spacing={1}>
-          <Grid item>
-            <Button variant="outlined" onClick={save}>
-              Save {id}
-            </Button>
+        <Grid item container spacing={1} justifyContent="space-between">
+          <Grid item container spacing={1} xs="auto">
+            <Grid item>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  history.push('/qrcodes')
+                }}
+              >
+                <ArrowBackIcon />
+                Back
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={save}>
+                Save
+              </Button>
+            </Grid>
           </Grid>
           <Grid item>
-            <Button variant="outlined" color="error">
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                const index = qrCodes.findIndex((c) => c.id === id)
+                if (index >= 0) {
+                  qrCodes.splice(index, 1)
+                }
+
+                dispatch.qrCode.saveQrCodes(qrCodes)
+                history.push('/qrcodes')
+              }}
+            >
               <DeleteForeverOutlinedIcon />
               Delete
             </Button>
@@ -126,6 +156,9 @@ const QrCodeDetail = (): React.ReactElement => {
                   new QrCode({
                     ...code,
                     type: event.target.value as QrCodeType,
+                    ...(event.target.value === QrCodeType.SMS
+                      ? { smsPhone: '', smsMessage: '' }
+                      : {}),
                   })
                 )
                 console.log(code)
@@ -145,8 +178,6 @@ const QrCodeDetail = (): React.ReactElement => {
             ...message,
             open: false,
           })
-
-          history.push('/qrcodes') 
         }}
         message={message.message}
       />

@@ -30,6 +30,12 @@ export class QrCode {
   @JsonProperty('lastSyncOn', Number, true)
   lastSyncOn?: number = undefined
 
+  @JsonProperty('smsMessage', String, true)
+  smsMessage?: string = undefined
+
+  @JsonProperty('smsPhone', String, true)
+  smsPhone?: string = undefined
+
   constructor(obj?: Partial<QrCode>) {
     if (obj) {
       Object.assign(this, obj)
@@ -46,7 +52,11 @@ export class QrCode {
       return `https://qrcoder-api.tonylin0826.workers.dev/url-uuid/${this.id}`;
     }
 
-    return ''
+    if (this.type === QrCodeType.SMS) {
+      return `SMSTO:${this.smsPhone}:${this.smsMessage}`
+    }
+
+    return 'tests'
   }
 
   static fromJson(json: object): QrCode {
@@ -55,7 +65,7 @@ export class QrCode {
   }
 }
 
-export interface QrCodeDetailUrlProps {
+export interface QrCodeDetailProps {
   code: QrCode
   setCode: React.Dispatch<React.SetStateAction<QrCode>>
 }
