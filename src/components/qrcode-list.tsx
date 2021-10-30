@@ -64,7 +64,7 @@ const QrCodeList = (): React.ReactElement => {
         <Grid
           container
           spacing={4}
-          sx={{ paddingTop: 4, width: '100%', marginTop: 3 }}
+          sx={{ paddingTop: [0, 4], width: '100%', marginTop: [0, 3] }}
           justifyContent="center"
           alignItems="center"
         >
