@@ -1,4 +1,4 @@
-import { Grid, Link, styled, TextField, Typography } from '@mui/material'
+import { Grid, styled, TextField } from '@mui/material'
 import { QrCode, QrCodeDetailProps } from '../types/qrcode'
 import QrCodeWithLogo from 'qrcode-with-logos'
 import { useEffect } from 'react'

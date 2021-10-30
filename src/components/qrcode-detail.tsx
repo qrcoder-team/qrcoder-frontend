@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
   Snackbar,
 } from '@mui/material'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import QrCodeUrl from './qrcode-url'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
@@ -23,6 +23,10 @@ import { RootModel } from '../models'
 import QrCodeSms from './qrcode-sms'
 import QrCodeCall from './qrcode-call'
 import QrCodeEmail from './qrcode-email'
+import PublicIcon from '@mui/icons-material/Public'
+import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled'
+import SmsIcon from '@mui/icons-material/Sms'
+import EmailIcon from '@mui/icons-material/Email'
 
 const QrCodeDetail = (): React.ReactElement => {
   const { id }: { id: string } = useParams()
@@ -65,10 +69,27 @@ const QrCodeDetail = (): React.ReactElement => {
   }
 
   const qrCodeTypeOptions = () => {
+    const displayMap = new Map<QrCodeType, string>([
+      [QrCodeType.URL, 'Dynamic URL'],
+      [QrCodeType.SMS, 'Send an SMS'],
+      [QrCodeType.Call, 'Make a phone call'],
+      [QrCodeType.Email, 'Send and email'],
+    ])
+
+    const iconMap = new Map<QrCodeType, ReactElement>([
+      [QrCodeType.URL, <PublicIcon sx={{ marginRight: 1 }} />],
+      [QrCodeType.SMS, <SmsIcon sx={{ marginRight: 1 }} />],
+      [QrCodeType.Call, <PhoneEnabledIcon sx={{ marginRight: 1 }} />],
+      [QrCodeType.Email, <EmailIcon sx={{ marginRight: 1 }} />],
+    ])
+
     return (Object.keys(QrCodeType) as Array<keyof typeof QrCodeType>).map(
       (k) => (
         <MenuItem key={k} value={QrCodeType[k]}>
-          {k}
+          <Grid container>
+            {iconMap.get(QrCodeType[k])}
+            <span>{displayMap.get(QrCodeType[k])}</span>
+          </Grid>
         </MenuItem>
       )
     )

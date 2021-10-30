@@ -6,7 +6,7 @@ export enum QrCodeType {
   SMS = 'sms',
   Email = 'email',
   Call = 'call',
-  Contact = 'contact',
+  // Contact = 'contact',
 }
 
 @JsonObject('QrCode')
