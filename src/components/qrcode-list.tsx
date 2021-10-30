@@ -6,6 +6,7 @@ import { RootModel } from '../models'
 import { Dispatch } from '../store'
 import { QrCode } from '../types/qrcode'
 import QrCodeComponent from './qrcode'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const QrCodeList = (): React.ReactElement => {
   const qrCodes = useSelector(
@@ -30,6 +31,7 @@ const QrCodeList = (): React.ReactElement => {
             history.push(`/qrcodes/${newCode.id}`)
           }}
         >
+          <AddCircleOutlineIcon sx={{ marginRight: 1 }} />
           Create a new QRCode
         </Button>
       </Grid>

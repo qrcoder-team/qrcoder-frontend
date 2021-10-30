@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Dispatch } from '../store'
 import { RootModel } from '../models'
 import QrCodeSms from './qrcode-sms'
+import QrCodeCall from './qrcode-call'
+import QrCodeEmail from './qrcode-email'
 
 const QrCodeDetail = (): React.ReactElement => {
   const { id }: { id: string } = useParams()
@@ -76,6 +78,8 @@ const QrCodeDetail = (): React.ReactElement => {
     const typeMap = new Map<QrCodeType, any>([
       [QrCodeType.URL, QrCodeUrl],
       [QrCodeType.SMS, QrCodeSms],
+      [QrCodeType.Call, QrCodeCall],
+      [QrCodeType.Email, QrCodeEmail],
     ])
 
     return (Object.keys(QrCodeType) as Array<keyof typeof QrCodeType>).map(
@@ -137,7 +141,7 @@ const QrCodeDetail = (): React.ReactElement => {
                 history.push('/qrcodes')
               }}
             >
-              <DeleteForeverOutlinedIcon />
+              <DeleteForeverOutlinedIcon sx={{ marginRight: 1 }} />
               Delete
             </Button>
           </Grid>
@@ -158,6 +162,12 @@ const QrCodeDetail = (): React.ReactElement => {
                     type: event.target.value as QrCodeType,
                     ...(event.target.value === QrCodeType.SMS
                       ? { smsPhone: '', smsMessage: '' }
+                      : {}),
+                    ...(event.target.value === QrCodeType.Call
+                      ? { callPhone: '' }
+                      : {}),
+                    ...(event.target.value === QrCodeType.Email
+                      ? { emailRecipient: '', emailSubject: '', emailText: '' }
                       : {}),
                   })
                 )

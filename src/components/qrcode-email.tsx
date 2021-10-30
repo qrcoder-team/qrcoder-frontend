@@ -11,7 +11,7 @@ const Img = styled('img')({
   borderRadius: 10,
 })
 
-const QrCodeSms = ({
+const QrCodeEmail = ({
   code,
   setCode,
 }: QrCodeDetailProps): React.ReactElement => {
@@ -35,7 +35,7 @@ const QrCodeSms = ({
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12}>
         <TextField
           label="Name"
           value={code.name}
@@ -50,16 +50,34 @@ const QrCodeSms = ({
           }}
         />
       </Grid>
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} md={4}>
         <TextField
-          label="Recipient Phone Number"
-          value={code.smsPhone}
+          label="Send To"
+          value={code.emailRecipient}
           sx={{ width: '100%' }}
           onChange={(e) => {
             setCode(
               new QrCode({
                 ...code,
-                smsPhone: e.target.value,
+                emailRecipient: e.target.value,
+              })
+            )
+          }}
+          onBlur={() => {
+            updateQrCodeImage()
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} md={8}>
+        <TextField
+          label="Email Subject"
+          value={code.emailSubject}
+          sx={{ width: '100%' }}
+          onChange={(e) => {
+            setCode(
+              new QrCode({
+                ...code,
+                emailSubject: e.target.value,
               })
             )
           }}
@@ -70,16 +88,16 @@ const QrCodeSms = ({
       </Grid>
       <Grid item xs={12}>
         <TextField
-          label="Text Message"
+          label="Email Text"
           multiline
           rows={10}
-          value={code.smsMessage}
+          value={code.emailText}
           sx={{ width: '100%' }}
           onChange={(e) => {
             setCode(
               new QrCode({
                 ...code,
-                smsMessage: e.target.value,
+                emailText: e.target.value,
               })
             )
           }}
@@ -109,4 +127,4 @@ const QrCodeSms = ({
   )
 }
 
-export default QrCodeSms
+export default QrCodeEmail

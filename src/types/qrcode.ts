@@ -36,6 +36,18 @@ export class QrCode {
   @JsonProperty('smsPhone', String, true)
   smsPhone?: string = undefined
 
+  @JsonProperty('callPhone', String, true)
+  callPhone?: string = undefined
+
+  @JsonProperty('emailRecipient', String, true)
+  emailRecipient?: string = undefined
+
+  @JsonProperty('emailSubject', String, true)
+  emailSubject?: string = undefined
+
+  @JsonProperty('emailText', String, true)
+  emailText?: string = undefined
+
   constructor(obj?: Partial<QrCode>) {
     if (obj) {
       Object.assign(this, obj)
@@ -55,6 +67,15 @@ export class QrCode {
     if (this.type === QrCodeType.SMS) {
       return `SMSTO:${this.smsPhone}:${this.smsMessage}`
     }
+
+    if (this.type === QrCodeType.Call) {
+      return `tel:${this.callPhone}`
+    }
+
+    if (this.type === QrCodeType.Email) {
+      return `mailto:${this.emailRecipient},?subject=${this.emailSubject}&body=${this.emailText}`
+    }
+
 
     return 'tests'
   }

@@ -11,6 +11,7 @@ import { useHistory } from 'react-router'
 import QrCodeWithLogo from 'qrcode-with-logos'
 import { useEffect } from 'react'
 import { QrCode as QrCodeClass } from '../types/qrcode'
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline'
 
 const Img = styled('img')({
   margin: 'auto',
@@ -47,8 +48,13 @@ const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
   console.log(document.getElementById(`img-${id}`))
   return (
     <Card
-      sx={{ padding: 4, boxShadow: 'rgb(0 0 0 / 15%) 0px 4px 24px;' }}
-      // sx={{  }}
+      sx={{
+        padding: 4,
+        boxShadow: 'rgb(0 0 0 / 6%) 0px 4px 24px;',
+        '&:hover': {
+          boxShadow: 'rgb(0 0 0 / 15%) 0px 4px 24px;',
+        },
+      }}
     >
       <Grid container spacing={2}>
         <Grid item xs="auto">
@@ -64,7 +70,10 @@ const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
         <Grid item xs={8} flexDirection="column" container>
           <Grid item container spacing={1}>
             <Grid item xs="auto">
-              <Chip label={type.toUpperCase()} />
+              <Chip
+                label={type.toUpperCase()}
+                sx={{ background: 'rgb(196, 255, 195)', minWidth: 80 }}
+              />
             </Grid>
             <Grid
               item
@@ -74,16 +83,18 @@ const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
                 display: 'flex',
               }}
             >
-              <Typography variant="body2">{name}</Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                {name}
+              </Typography>
             </Grid>
           </Grid>
           <Grid item container spacing={1}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ paddingTop: '16px !important' }}>
               <Typography variant="caption">
                 Created At: {new Date(createdAt).toLocaleString()}
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ paddingTop: '0 !important' }}>
               <Typography variant="caption">
                 Last Sync On:{' '}
                 {lastSyncOn ? new Date(lastSyncOn).toLocaleString() : 'Never'}
@@ -116,6 +127,7 @@ const QrCode = ({ code }: QrCodeProps): React.ReactElement => {
               history.push(`/qrcodes/${id}`)
             }}
           >
+            <ModeEditOutlineIcon sx={{ marginRight: 1 }} />
             Modify
           </Button>
         </Grid>

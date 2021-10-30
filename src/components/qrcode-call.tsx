@@ -1,4 +1,4 @@
-import { Grid, styled, TextField } from '@mui/material'
+import { Grid, Link, styled, TextField, Typography } from '@mui/material'
 import { QrCode, QrCodeDetailProps } from '../types/qrcode'
 import QrCodeWithLogo from 'qrcode-with-logos'
 import { useEffect } from 'react'
@@ -11,7 +11,7 @@ const Img = styled('img')({
   borderRadius: 10,
 })
 
-const QrCodeSms = ({
+const QrCodeCall = ({
   code,
   setCode,
 }: QrCodeDetailProps): React.ReactElement => {
@@ -53,33 +53,13 @@ const QrCodeSms = ({
       <Grid item xs={12} md={8}>
         <TextField
           label="Recipient Phone Number"
-          value={code.smsPhone}
+          value={code.callPhone}
           sx={{ width: '100%' }}
           onChange={(e) => {
             setCode(
               new QrCode({
                 ...code,
-                smsPhone: e.target.value,
-              })
-            )
-          }}
-          onBlur={() => {
-            updateQrCodeImage()
-          }}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="Text Message"
-          multiline
-          rows={10}
-          value={code.smsMessage}
-          sx={{ width: '100%' }}
-          onChange={(e) => {
-            setCode(
-              new QrCode({
-                ...code,
-                smsMessage: e.target.value,
+                callPhone: e.target.value,
               })
             )
           }}
@@ -109,4 +89,4 @@ const QrCodeSms = ({
   )
 }
 
-export default QrCodeSms
+export default QrCodeCall
